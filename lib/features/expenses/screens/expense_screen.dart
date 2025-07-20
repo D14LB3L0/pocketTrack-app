@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+
+// own
+import '../../../shared/widgets/widgets.dart';
 import 'package:pocket_track/routes/app_routes.dart';
 
-import '../widgets/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class ExpenseScreen extends StatelessWidget {
+  const ExpenseScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

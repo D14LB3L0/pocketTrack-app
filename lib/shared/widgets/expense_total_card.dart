@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_track/theme/app_theme.dart';
-import 'package:pocket_track/utils/utils.dart';
+import 'package:pocket_track/shared/theme/app_theme.dart';
+import 'package:pocket_track/shared/utils/utils.dart';
 
 class ExpenseTotalCard extends StatelessWidget {
   final double totalExpenses;

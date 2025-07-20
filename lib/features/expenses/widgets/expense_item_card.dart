@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_track/theme/app_theme.dart';
+import 'package:pocket_track/shared/theme/app_theme.dart';
 
-import 'widgets.dart';
+import '../../../shared/widgets/widgets.dart';
 
 class ExpenseItemCard extends StatelessWidget {
   const ExpenseItemCard({super.key});
@@ -34,7 +34,7 @@ class ExpenseItemCard extends StatelessWidget {
 }
 
 class _ExpenseActions extends StatelessWidget {
-  const _ExpenseActions({super.key});
+  const _ExpenseActions();
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _ExpenseActions extends StatelessWidget {
 }
 
 class _ExpenseItemDetails extends StatelessWidget {
-  const _ExpenseItemDetails({super.key});
+  const _ExpenseItemDetails();
 
   @override
   Widget build(BuildContext context) {

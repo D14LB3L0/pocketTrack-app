@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../screens/screens.dart';
+import '../features/expenses/screens/screens.dart';
+
 
 class AppRoutes {
-  static const String home = 'home';
+  static const String expense = 'expense';
   static const String addExpense = 'add_expense';
 
   static final Map<String, WidgetBuilder> routes = {
-    home: (_) => const HomeScreen(),
+    expense: (_) => const ExpenseScreen(),
     addExpense: (_) => const AddExpenseScreen(),
   };
 }

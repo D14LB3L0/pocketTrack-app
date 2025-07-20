@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'routes/app_routes.dart';
-import 'theme/app_theme.dart';
+import 'shared/theme/app_theme.dart';
 
 void main() => runApp(const MyApp());
 
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      initialRoute: AppRoutes.home,
+      initialRoute: AppRoutes.expense,
       routes: AppRoutes.routes,
       theme: AppTheme.lighTheme,
     );
