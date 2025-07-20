@@ -18,6 +18,7 @@ class AppTheme {
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
+      iconTheme: IconThemeData(color: Colors.white)
     ),
 
     // FloatingActionButtonTheme

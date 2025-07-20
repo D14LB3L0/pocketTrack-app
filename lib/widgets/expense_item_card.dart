@@ -8,29 +8,26 @@ class ExpenseItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return Opacity(
-      opacity: 0.8,
-      child: Container(
-        width: width * 0.9,
-        height: 110,
-        decoration: _decoration(),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(Icons.drive_eta, size: 50, color: AppTheme.primaryColor),
-
-              SizedBox(width: 20),
-
-              _ExpenseItemDetails(),
-
-              SizedBox(width: 20),
-
-              _ExpenseActions(),
-            ],
-          ),
+    return Container(
+      width: width * 0.9,
+      height: 110,
+      decoration: _decoration(),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.drive_eta, size: 50, color: AppTheme.primaryColor),
+    
+            SizedBox(width: 20),
+    
+            _ExpenseItemDetails(),
+    
+            SizedBox(width: 20),
+    
+            _ExpenseActions(),
+          ],
         ),
       ),
     );
@@ -54,7 +51,7 @@ class _ExpenseActions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         IconButton(
-          icon: Icon(Icons.edit, color: AppTheme.primaryColor),
+          icon: Icon(Icons.edit, color: AppTheme.secondaryColor),
           onPressed: () {
             // Handle edit action
           },
