@@ -96,7 +96,17 @@ class _ExpenseForm extends StatelessWidget {
                       Size(width * 0.84, double.infinity),
                     ),
                   ),
+                  trailingIcon: Icon(
+                    Icons.arrow_drop_down,
+                    color: AppTheme.primaryColor, // Cambia aquí el color que desees
+                  ),
                 ),
+
+                SizedBox(height: 25),
+
+                Text('Date', style: TextStyle(fontSize: 18)),
+                SizedBox(height: 10),
+                DatePickerInput(),
 
                 SizedBox(height: 40),
 

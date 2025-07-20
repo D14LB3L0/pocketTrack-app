@@ -7,6 +7,12 @@ class AppTheme {
   static Color backgroundColor = Color(0XFFF0FCFC);
 
   static ThemeData lighTheme = ThemeData.light().copyWith(
+    colorScheme: ColorScheme.light(
+      primary: AppTheme.primaryColor, 
+      onPrimary: Colors.white, 
+      onSurface: Colors.black, 
+    ),
+
     // Scaffold
     scaffoldBackgroundColor: backgroundColor,
     // AppBarTheme
