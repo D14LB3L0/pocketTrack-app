@@ -30,7 +30,7 @@ class ExpenseTotalCard extends StatelessWidget {
             ),
             SizedBox(height: 5),
             Text(
-              '\$${formatToTwoDecimals(totalExpenses)}',
+              'S/. ${formatToTwoDecimals(totalExpenses)}',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w600,
@@ -45,7 +45,7 @@ class ExpenseTotalCard extends StatelessWidget {
 
   BoxDecoration _decoration() {
     return BoxDecoration(
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: BorderRadius.circular(20),
       color: AppTheme.primaryColor,
       boxShadow: [
         BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),

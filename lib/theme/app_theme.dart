@@ -6,7 +6,6 @@ class AppTheme {
   static Color accentColor = Color(0XFF20dad8);
   static Color backgroundColor = Color(0XFFF0FCFC);
 
-
   static ThemeData lighTheme = ThemeData.light().copyWith(
     // Scaffold
     scaffoldBackgroundColor: backgroundColor,
@@ -20,5 +19,13 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
     ),
+
+    // FloatingActionButtonTheme
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: secondaryColor,
+      foregroundColor: Colors.white,
+      elevation: 0
+    ),
   );
 }
+ 

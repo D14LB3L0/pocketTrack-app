@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_track/widgets/expense_total_card.dart';
+
+import '../widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -14,9 +15,33 @@ class HomeScreen extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: Column(
             children: [
-              ExpenseTotalCard(totalExpenses: 2000.151331,),
+              ExpenseTotalCard(totalExpenses: 2590.151331),
+              
+              SizedBox(height: 40),
+
+              Expanded(
+                child: ListView.separated(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: 5,
+                  itemBuilder: (_, int index) =>
+                      Align(child: ExpenseItemCard()),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 20),
+                ),
+              ),
+
+              SizedBox(height: 40),
             ],
           ),
+        ),
+      ),
+      floatingActionButton: Transform.translate(
+        offset: Offset(0, -25),
+        child: FloatingActionButton(
+          onPressed: () {
+            print('add expense button pressed');
+          },
+          child: Icon(Icons.add),
         ),
       ),
     );
