@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_track/routes/app_routes.dart';
 
 import '../widgets/widgets.dart';
 
@@ -39,7 +40,7 @@ class HomeScreen extends StatelessWidget {
         offset: Offset(0, -25),
         child: FloatingActionButton(
           onPressed: () {
-            print('add expense button pressed');
+            Navigator.pushNamed(context, AppRoutes.addExpense);
           },
           child: Icon(Icons.add),
         ),

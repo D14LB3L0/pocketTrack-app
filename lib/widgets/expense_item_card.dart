@@ -1,48 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_track/theme/app_theme.dart';
 
+import 'widgets.dart';
+
 class ExpenseItemCard extends StatelessWidget {
   const ExpenseItemCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
 
-    return Opacity(
-      opacity: 0.8,
-      child: Container(
-        width: width * 0.9,
-        height: 110,
-        decoration: _decoration(),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(Icons.drive_eta, size: 50, color: AppTheme.primaryColor),
+    return CardContainer(
+      height: 110,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.drive_eta, size: 50, color: AppTheme.primaryColor),
 
-              SizedBox(width: 20),
+            SizedBox(width: 20),
 
-              _ExpenseItemDetails(),
+            _ExpenseItemDetails(),
 
-              SizedBox(width: 20),
+            SizedBox(width: 20),
 
-              _ExpenseActions(),
-            ],
-          ),
+            _ExpenseActions(),
+          ],
         ),
       ),
     );
   }
-
-  BoxDecoration _decoration() => BoxDecoration(
-    borderRadius: BorderRadius.circular(20),
-    color: Colors.white70,
-    boxShadow: [
-      BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
-    ],
-  );
 }
 
 class _ExpenseActions extends StatelessWidget {
@@ -54,7 +42,7 @@ class _ExpenseActions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         IconButton(
-          icon: Icon(Icons.edit, color: AppTheme.primaryColor),
+          icon: Icon(Icons.edit, color: AppTheme.secondaryColor),
           onPressed: () {
             // Handle edit action
           },

@@ -11,34 +11,31 @@ class ExpenseTotalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return Opacity(
-      opacity: 0.8,
-      child: Container(
-        width: width * 0.6,
-        height: 120,
-        decoration: _decoration(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Total Expenses',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
+    return Container(
+      width: width * 0.6,
+      height: 120,
+      decoration: _decoration(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Total Expenses',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
             ),
-            SizedBox(height: 5),
-            Text(
-              'S/. ${formatToTwoDecimals(totalExpenses)}',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
+          ),
+          SizedBox(height: 5),
+          Text(
+            'S/. ${formatToTwoDecimals(totalExpenses)}',
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
