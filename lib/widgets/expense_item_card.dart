@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_track/theme/app_theme.dart';
 
+import 'widgets.dart';
+
 class ExpenseItemCard extends StatelessWidget {
   const ExpenseItemCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
 
-    return Container(
-      width: width * 0.9,
+    return CardContainer(
       height: 110,
-      decoration: _decoration(),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Row(
@@ -19,27 +18,19 @@ class ExpenseItemCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.drive_eta, size: 50, color: AppTheme.primaryColor),
-    
+
             SizedBox(width: 20),
-    
+
             _ExpenseItemDetails(),
-    
+
             SizedBox(width: 20),
-    
+
             _ExpenseActions(),
           ],
         ),
       ),
     );
   }
-
-  BoxDecoration _decoration() => BoxDecoration(
-    borderRadius: BorderRadius.circular(20),
-    color: Colors.white70,
-    boxShadow: [
-      BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
-    ],
-  );
 }
 
 class _ExpenseActions extends StatelessWidget {

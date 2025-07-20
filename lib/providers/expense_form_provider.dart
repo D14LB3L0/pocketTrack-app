@@ -8,7 +8,7 @@ class ExpenseFormProvider extends ChangeNotifier {
   // atributes
   String description = '';
   late double amount;
-  late ExpenseType expenseType;
+  ExpenseType? expenseType;
   late DateTime date;
 
   // loading

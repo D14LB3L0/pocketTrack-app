@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CardContainer extends StatelessWidget {
   final Widget child;
-  final int? height;
+  final double? height;
 
   const CardContainer({super.key, required this.child, this.height});
 
@@ -10,15 +10,13 @@ class CardContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     
-    return Padding(
-      padding: EdgeInsets.only(top: 40),
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          width: width * 0.9,
-          decoration: _decoration(),
-          child: child,
-        ),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        height: height,
+        width: width * 0.9,
+        decoration: _decoration(),
+        child: child,
       ),
     );
   }

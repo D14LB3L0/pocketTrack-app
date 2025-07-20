@@ -18,15 +18,46 @@ class AppTheme {
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
-      iconTheme: IconThemeData(color: Colors.white)
+      iconTheme: IconThemeData(color: Colors.white),
     ),
 
     // FloatingActionButtonTheme
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: secondaryColor,
       foregroundColor: Colors.white,
-      elevation: 0
+      elevation: 5,
+    ),
+
+    // InputDecorationTheme
+    inputDecorationTheme: InputDecorationTheme(
+      errorStyle: TextStyle(fontSize: 14),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppTheme.primaryColor),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppTheme.primaryColor, width: 2),
+      ),
+      hintStyle: TextStyle(fontSize: 16),
+    ),
+
+    // MenuTheme
+    menuTheme: MenuThemeData(
+      style: MenuStyle(
+        backgroundColor: WidgetStateProperty.all(Colors.white),
+        visualDensity: VisualDensity.compact,
+        alignment: Alignment.bottomLeft,
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(
+            side: BorderSide(color: AppTheme.primaryColor, width: 2),
+          ),
+        ),
+      ),
+    ),
+
+    // ButtonTheme
+    buttonTheme: ButtonThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      padding: EdgeInsets.symmetric(vertical: 12),
     ),
   );
 }
- 
