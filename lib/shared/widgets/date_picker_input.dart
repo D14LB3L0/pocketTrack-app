@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pocket_track/shared/theme/app_theme.dart';
+import 'package:pocket_track/shared/theme/input_decorations.dart';
+
+import '../../features/expenses/providers/providers.dart';
 
 class DatePickerInput extends StatefulWidget {
+  ExpenseFormProvider expenseForm;
+
+  DatePickerInput({super.key, required this.expenseForm});
+  
   @override
   _DatePickerInputState createState() => _DatePickerInputState();
 }
@@ -12,19 +18,25 @@ class _DatePickerInputState extends State<DatePickerInput> {
   DateTime? _selectedDate;
 
   @override
+  void initState() {
+    super.initState();
+    _selectedDate = DateTime.now();
+    _controller.text = DateFormat('dd/MM/yyyy').format(_selectedDate!);
+    widget.expenseForm.date = _selectedDate!;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: _controller,
       readOnly: true,
-      decoration: InputDecoration(
-        hintText: 'Select Date',
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(bottom: 10, right: 24), // Ajusta verticalmente
-          child: Icon(Icons.calendar_today, size: 20, color: AppTheme.primaryColor),
-        ),
-        border: UnderlineInputBorder(),
-      ),
-
+      decoration: InputDecorations.formDatePickerDecoration(),
       onTap: () async {
         DateTime? picked = await showDatePicker(
           context: context,
@@ -36,6 +48,7 @@ class _DatePickerInputState extends State<DatePickerInput> {
           setState(() {
             _selectedDate = picked;
             _controller.text = DateFormat('dd/MM/yyyy').format(picked);
+            widget.expenseForm.date = picked;
           });
         }
       },

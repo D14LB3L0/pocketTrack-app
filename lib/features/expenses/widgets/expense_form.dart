@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pocket_track/shared/utils/format_utils.dart';
 import 'package:provider/provider.dart';
 
 // own
@@ -17,7 +19,7 @@ class ExpenseForm extends StatelessWidget {
 
     return Form(
       key: expenseForm.formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
+      autovalidateMode: AutovalidateMode.disabled,
       child: Column(
         children: [
           Padding(
@@ -43,22 +45,23 @@ class _ExpenseFormFields extends StatelessWidget {
       children: [
         _DescriptionInput(expenseForm: expenseForm),
 
-        _AmountInput(expenseForm: expenseForm),
+        _AmountInput(onChanged: (value) => expenseForm.amount = value),
 
         _DropDownType(expenseForm: expenseForm, width: width),
 
-        _DatePickerInput(),
+        _DatePickerInput(expenseForm: expenseForm),
 
-        _SubmitButton(width: width),
+        _SubmitButton(expenseForm: expenseForm, width: width),
       ],
     );
   }
 }
 
 class _SubmitButton extends StatelessWidget {
-  const _SubmitButton({required this.width});
+  const _SubmitButton({required this.width, required this.expenseForm});
 
   final double width;
+  final ExpenseFormProvider expenseForm;
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +70,23 @@ class _SubmitButton extends StatelessWidget {
       child: SizedBox(
         width: width * 0.7,
         child: MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            final isValid = expenseForm.isValidForm();
+            if (!isValid) return;
+
+            print(expenseForm.amount);
+            print(expenseForm.description);
+            print(expenseForm.expenseType!.name);
+            print(expenseForm.date);
+          },
           color: AppTheme.secondaryColor,
           child: Text(
             'Register Expense',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
           ),
         ),
       ),
@@ -80,7 +95,9 @@ class _SubmitButton extends StatelessWidget {
 }
 
 class _DatePickerInput extends StatelessWidget {
-  const _DatePickerInput();
+  final ExpenseFormProvider expenseForm;
+
+  const _DatePickerInput({required this.expenseForm});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +106,7 @@ class _DatePickerInput extends StatelessWidget {
       children: [
         Text('Date', style: TextStyle(fontSize: 18)),
         SizedBox(height: 10),
-        DatePickerInput(),
+        DatePickerInput(expenseForm: expenseForm),
         SizedBox(height: 40),
       ],
     );
@@ -97,10 +114,7 @@ class _DatePickerInput extends StatelessWidget {
 }
 
 class _DropDownType extends StatelessWidget {
-  const _DropDownType({
-    required this.expenseForm,
-    required this.width,
-  });
+  const _DropDownType({required this.expenseForm, required this.width});
 
   final ExpenseFormProvider expenseForm;
   final double width;
@@ -112,36 +126,61 @@ class _DropDownType extends StatelessWidget {
       children: [
         Text('Expense Type', style: TextStyle(fontSize: 18)),
 
-        DropdownMenu<ExpenseType>(
-          initialSelection: expenseForm.expenseType,
-          onSelected: (ExpenseType? type) {
+        DropdownButtonFormField<ExpenseType>(
+          dropdownColor: Colors.white,
+          value: expenseForm.expenseType,
+          onChanged: (ExpenseType? type) {
             if (type != null) expenseForm.expenseType = type;
           },
-          dropdownMenuEntries: ExpenseType.values.map((type) {
-            return DropdownMenuEntry(value: type, label: type.name);
+          validator: (value) {
+            if (value == null) return 'Please select an expense type';
+            return null;
+          },
+          items: ExpenseType.values.map((type) {
+            return DropdownMenuItem(
+              value: type,
+              child: Text(
+                capitalizeFirstLetter(type.name),
+                style: TextStyle(fontWeight: FontWeight.normal),
+              ),
+            );
           }).toList(),
-          hintText: 'Select a type',
-          width: width * 0.9,
-          menuStyle: MenuStyle(
-            maximumSize: WidgetStateProperty.all(
-              Size(width * 0.84, double.infinity),
-            ),
+          decoration: InputDecoration(
+            hintText: 'Select a type',
+            border: OutlineInputBorder(),
           ),
-          trailingIcon: Icon(
-            Icons.arrow_drop_down,
-            color: AppTheme.primaryColor, // Cambia aquí el color que desees
-          ),
+          icon: Icon(Icons.arrow_drop_down, color: AppTheme.primaryColor),
         ),
+
         SizedBox(height: 25),
       ],
     );
   }
 }
 
-class _AmountInput extends StatelessWidget {
-  const _AmountInput({required this.expenseForm});
+class _AmountInput extends StatefulWidget {
+  const _AmountInput({required this.onChanged});
 
-  final ExpenseFormProvider expenseForm;
+  final void Function(double value) onChanged;
+
+  @override
+  State<_AmountInput> createState() => _AmountInputState();
+}
+
+class _AmountInputState extends State<_AmountInput> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,12 +190,40 @@ class _AmountInput extends StatelessWidget {
         Text('Amount', style: TextStyle(fontSize: 18)),
 
         TextFormField(
+          controller: _controller,
+          keyboardType: TextInputType.numberWithOptions(decimal: true),
           autocorrect: false,
           style: TextStyle(fontSize: 16),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'^\d{0,8}(\.\d{0,3})?$')),
+          ],
           decoration: InputDecorations.formInputDecoration(
-            hintText: 'Enter amount.',
+            hintText: 'Enter amount',
           ),
-          onChanged: (value) => expenseForm.description = value,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Amount is required';
+            }
+
+            final amount = double.tryParse(value);
+            if (amount == null || amount <= 0) {
+              return 'Enter a valid amount';
+            }
+            return null;
+          },
+          onChanged: (value) {
+            if (value == '.') {
+              final newValue = '0.';
+              _controller.text = newValue;
+              _controller.selection = TextSelection.fromPosition(
+                TextPosition(offset: newValue.length),
+              );
+              widget.onChanged(0.0);
+              return;
+            }
+
+            widget.onChanged(double.tryParse(value) ?? 0.0);
+          },
         ),
 
         SizedBox(height: 25),
@@ -178,14 +245,26 @@ class _DescriptionInput extends StatelessWidget {
         Text('Description', style: TextStyle(fontSize: 18)),
 
         TextFormField(
+          maxLength: 50,
           autocorrect: false,
           style: TextStyle(fontSize: 16),
           decoration: InputDecorations.formInputDecoration(
-            hintText: 'Add a short description.',
+            hintText: 'Add a short description',
           ),
           onChanged: (value) => expenseForm.description = value,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Description is required';
+            }
+
+            if (value.length > 50) {
+              return 'Maximum 50 characters';
+            }
+
+            return null;
+          },
         ),
-        SizedBox(height: 25),
+        SizedBox(height: 10),
       ],
     );
   }

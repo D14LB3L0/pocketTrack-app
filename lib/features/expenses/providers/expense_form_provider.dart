@@ -7,7 +7,7 @@ class ExpenseFormProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   // atributes
-  String description = '';
+  late String description;
   late double amount;
   ExpenseType? expenseType;
   late DateTime date;
