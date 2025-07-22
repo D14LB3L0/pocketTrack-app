@@ -5,7 +5,7 @@ import 'package:pocket_track/shared/utils/format_utils.dart';
 import 'package:provider/provider.dart';
 
 // own
-import '../../../shared/model/model.dart';
+import '../../../shared/model/expense_type/expense_type.dart';
 import '../providers/providers.dart';
 import '../../../shared/theme/theme.dart';
 import '../../../shared/widgets/widgets.dart';
@@ -133,7 +133,7 @@ class _DropDownTypeState extends State<_DropDownType> {
       Provider.of<ExpenseTypesProvider>(
         context,
         listen: false,
-      ).fetchExpenseTypes();
+      ).fetchGetAllExpenseTypes();
     });
   }
 
@@ -152,9 +152,9 @@ class _DropDownTypeState extends State<_DropDownType> {
             const Text('Expense Type', style: TextStyle(fontSize: 18)),
             const SizedBox(height: 8),
 
-            DropdownButtonFormField<Datum>(
+            DropdownButtonFormField<ExpenseType>(
               value: widget.expenseForm.expenseType,
-              onChanged: (Datum? selected) {
+              onChanged: (ExpenseType? selected) {
                 if (selected != null) {
                   widget.expenseForm.expenseType = selected;
                 }

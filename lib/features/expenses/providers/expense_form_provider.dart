@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../shared/model/model.dart';
-
-
+import '../../../shared/model/expense_type/expense_type.dart';
 
 class ExpenseFormProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -10,7 +8,7 @@ class ExpenseFormProvider extends ChangeNotifier {
   // atributes
   late String description;
   late double amount;
-  Datum? expenseType;
+  ExpenseType? expenseType;
   late DateTime date;
 
   // loading
