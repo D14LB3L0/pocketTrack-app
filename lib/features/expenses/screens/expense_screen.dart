@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../../shared/widgets/widgets.dart';
 import 'package:pocket_track/routes/app_routes.dart';
 
-
 class ExpenseScreen extends StatelessWidget {
   const ExpenseScreen({super.key});
 
@@ -19,7 +18,7 @@ class ExpenseScreen extends StatelessWidget {
           child: Column(
             children: [
               ExpenseTotalCard(totalExpenses: 2590.151331),
-              
+
               SizedBox(height: 40),
 
               Expanded(
@@ -38,8 +37,8 @@ class ExpenseScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: Transform.translate(
-        offset: Offset(0, -25),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 25.0),
         child: FloatingActionButton(
           onPressed: () {
             Navigator.pushNamed(context, AppRoutes.addExpense);

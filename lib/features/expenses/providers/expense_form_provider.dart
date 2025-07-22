@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../types/types.dart';
+import '../../../shared/model/model.dart';
+
 
 
 class ExpenseFormProvider extends ChangeNotifier {
@@ -9,7 +10,7 @@ class ExpenseFormProvider extends ChangeNotifier {
   // atributes
   late String description;
   late double amount;
-  ExpenseType? expenseType;
+  Datum? expenseType;
   late DateTime date;
 
   // loading

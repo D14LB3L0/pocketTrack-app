@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pocket_track/shared/provider/provider.dart';
 import 'package:pocket_track/shared/utils/format_utils.dart';
 import 'package:provider/provider.dart';
 
 // own
-import '../types/types.dart';
+import '../../../shared/model/model.dart';
 import '../providers/providers.dart';
 import '../../../shared/theme/theme.dart';
 import '../../../shared/widgets/widgets.dart';
@@ -113,47 +114,72 @@ class _DatePickerInput extends StatelessWidget {
   }
 }
 
-class _DropDownType extends StatelessWidget {
+class _DropDownType extends StatefulWidget {
   const _DropDownType({required this.expenseForm, required this.width});
 
   final ExpenseFormProvider expenseForm;
   final double width;
 
   @override
+  State<_DropDownType> createState() => _DropDownTypeState();
+}
+
+class _DropDownTypeState extends State<_DropDownType> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ExpenseTypesProvider>(
+        context,
+        listen: false,
+      ).fetchExpenseTypes();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Expense Type', style: TextStyle(fontSize: 18)),
+    return Consumer<ExpenseTypesProvider>(
+      builder: (_, provider, __) {
 
-        DropdownButtonFormField<ExpenseType>(
-          dropdownColor: Colors.white,
-          value: expenseForm.expenseType,
-          onChanged: (ExpenseType? type) {
-            if (type != null) expenseForm.expenseType = type;
-          },
-          validator: (value) {
-            if (value == null) return 'Please select an expense type';
-            return null;
-          },
-          items: ExpenseType.values.map((type) {
-            return DropdownMenuItem(
-              value: type,
-              child: Text(
-                capitalizeFirstLetter(type.name),
-                style: TextStyle(fontWeight: FontWeight.normal),
+        if (provider.isLoading) {
+          return const CircularProgressIndicator();
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Expense Type', style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 8),
+
+            DropdownButtonFormField<Datum>(
+              value: widget.expenseForm.expenseType,
+              onChanged: (Datum? selected) {
+                if (selected != null) {
+                  widget.expenseForm.expenseType = selected;
+                }
+              },
+              validator: (value) {
+                if (value == null) return 'Please select an expense type';
+                return null;
+              },
+              items: provider.expenseTypes.map((type) {
+                return DropdownMenuItem(
+                  value: type,
+                  child: Text(capitalizeFirstLetter(type.name)),
+                );
+              }).toList(),
+              decoration: const InputDecoration(
+                hintText: 'Select a type',
+                border: OutlineInputBorder(),
               ),
-            );
-          }).toList(),
-          decoration: InputDecoration(
-            hintText: 'Select a type',
-            border: OutlineInputBorder(),
-          ),
-          icon: Icon(Icons.arrow_drop_down, color: AppTheme.primaryColor),
-        ),
+              icon: Icon(Icons.arrow_drop_down, color: AppTheme.primaryColor),
+            ),
 
-        SizedBox(height: 25),
-      ],
+            const SizedBox(height: 25),
+          ],
+        );
+      },
     );
   }
 }
