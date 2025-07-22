@@ -42,7 +42,7 @@ class _DatePickerInputState extends State<DatePickerInput> {
           context: context,
           initialDate: _selectedDate ?? DateTime.now(),
           firstDate: DateTime(2000),
-          lastDate: DateTime(2100),
+          lastDate: DateTime.now(),
         );
         if (picked != null) {
           setState(() {
