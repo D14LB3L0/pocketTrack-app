@@ -10,7 +10,7 @@ class ExpenseFormProvider extends ChangeNotifier {
   // atributes
   late String description;
   late double amount;
-  Datum? expenseType;
+  ExpenseType? expenseType;
   late DateTime date;
 
   // loading

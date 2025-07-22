@@ -5,10 +5,10 @@ import 'package:pocket_track/shared/service/service.dart';
 class ExpenseTypesProvider extends ChangeNotifier {
   final ExpenseTypesService _service = ExpenseTypesService();
 
-  List<Datum> _expenseTypes = [];
+  List<ExpenseType> _expenseTypes = [];
   bool _isLoading = false;
 
-  List<Datum> get expenseTypes => _expenseTypes;
+  List<ExpenseType> get expenseTypes => _expenseTypes;
   bool get isLoading => _isLoading;
 
   Future<void> fetchExpenseTypes() async {

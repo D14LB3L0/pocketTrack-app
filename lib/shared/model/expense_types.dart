@@ -1,27 +1,27 @@
 import 'dart:convert';
 
-class ExpenseTypes {
+class ExpenseTypesResponse {
     bool success;
     int code;
     String message;
-    List<Datum> data;
+    List<ExpenseType> data;
 
-    ExpenseTypes({
+    ExpenseTypesResponse({
         required this.success,
         required this.code,
         required this.message,
         required this.data,
     });
 
-    factory ExpenseTypes.fromJson(String str) => ExpenseTypes.fromMap(json.decode(str));
+    factory ExpenseTypesResponse.fromJson(String str) => ExpenseTypesResponse.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory ExpenseTypes.fromMap(Map<String, dynamic> json) => ExpenseTypes(
+    factory ExpenseTypesResponse.fromMap(Map<String, dynamic> json) => ExpenseTypesResponse(
         success: json["success"],
         code: json["code"],
         message: json["message"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromMap(x))),
+        data: List<ExpenseType>.from(json["data"].map((x) => ExpenseType.fromMap(x))),
     );
 
     Map<String, dynamic> toMap() => {
@@ -32,20 +32,20 @@ class ExpenseTypes {
     };
 }
 
-class Datum {
+class ExpenseType {
     int id;
     String name;
 
-    Datum({
+    ExpenseType({
         required this.id,
         required this.name,
     });
 
-    factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
+    factory ExpenseType.fromJson(String str) => ExpenseType.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory Datum.fromMap(Map<String, dynamic> json) => Datum(
+    factory ExpenseType.fromMap(Map<String, dynamic> json) => ExpenseType(
         id: json["id"],
         name: json["name"],
     );

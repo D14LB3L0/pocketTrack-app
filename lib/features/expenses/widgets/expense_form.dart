@@ -152,9 +152,9 @@ class _DropDownTypeState extends State<_DropDownType> {
             const Text('Expense Type', style: TextStyle(fontSize: 18)),
             const SizedBox(height: 8),
 
-            DropdownButtonFormField<Datum>(
+            DropdownButtonFormField<ExpenseType>(
               value: widget.expenseForm.expenseType,
-              onChanged: (Datum? selected) {
+              onChanged: (ExpenseType? selected) {
                 if (selected != null) {
                   widget.expenseForm.expenseType = selected;
                 }
