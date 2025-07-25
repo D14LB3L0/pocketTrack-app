@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pocket_track/routes/app_routes.dart';
 import 'package:pocket_track/shared/provider/provider.dart';
-import 'package:pocket_track/shared/theme/input_texts.dart';
-import 'package:pocket_track/shared/utils/format_utils.dart';
+import 'package:pocket_track/shared/theme/input_text.dart';
 import 'package:pocket_track/shared/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -219,6 +218,10 @@ class _DropDownTypeState extends State<_DropDownType> {
                 hintText: 'Select a type',
                 border: OutlineInputBorder(),
               ),
+              hint: Text(
+                'Select Type',
+                style: TextStyle(color: Colors.grey), 
+              ),  
               icon: Icon(Icons.arrow_drop_down, color: AppTheme.primaryColor),
             ),
 

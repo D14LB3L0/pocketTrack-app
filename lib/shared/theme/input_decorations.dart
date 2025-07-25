@@ -9,7 +9,7 @@ class InputDecorations {
 
   static InputDecoration formDatePickerDecoration() {
     return InputDecoration(
-      hintText: 'Select Date', hintStyle: TextStyle(color: Colors.grey),
+      hintText: 'Select Date',
       prefixIcon: Padding(
         padding: const EdgeInsets.only(bottom: 10, right: 24),
         child: Icon(
