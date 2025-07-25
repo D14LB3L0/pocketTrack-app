@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pocket_track/shared/provider/provider.dart';
 import 'package:provider/provider.dart';
 
+import 'features/expenses/providers/expense_provider.dart';
 import 'routes/app_routes.dart';
 import 'shared/theme/app_theme.dart';
 
@@ -27,6 +28,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ExpenseTypesProvider()),
+        ChangeNotifierProvider(create: (_) => ExpenseProvider()),
       ],
       child: const MyApp(),
     ),

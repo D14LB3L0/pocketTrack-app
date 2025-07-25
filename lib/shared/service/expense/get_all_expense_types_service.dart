@@ -10,7 +10,6 @@ class GetAllExpenseTypesService {
   Future<List<ExpenseType>> getAllExpenseTypes() async {
     try {
       final response = await _dio.get('/expenseTypes');
-
       final parsedResponse = GetAllExpenseTypeResponse.fromMap(response.data);
 
       return parsedResponse.data;

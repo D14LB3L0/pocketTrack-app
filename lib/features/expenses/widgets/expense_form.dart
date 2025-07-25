@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pocket_track/routes/app_routes.dart';
 import 'package:pocket_track/shared/provider/provider.dart';
-import 'package:pocket_track/shared/theme/input_text.dart';
 import 'package:pocket_track/shared/utils/utils.dart';
 import 'package:provider/provider.dart';
 

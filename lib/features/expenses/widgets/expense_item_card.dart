@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_track/shared/theme/app_theme.dart';
+import 'package:pocket_track/features/expenses/model/model.dart';
+import 'package:pocket_track/shared/theme/theme.dart';
+import 'package:pocket_track/shared/utils/format_utils.dart';
 
 import '../../../shared/widgets/widgets.dart';
 
 class ExpenseItemCard extends StatelessWidget {
-  const ExpenseItemCard({super.key});
+  const ExpenseItemCard({super.key, required this.expense});
+
+  final Expense expense;
 
   @override
   Widget build(BuildContext context) {
-
     return CardContainer(
       height: 110,
       child: Padding(
@@ -17,11 +20,15 @@ class ExpenseItemCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Icons.drive_eta, size: 50, color: AppTheme.primaryColor),
+            expenseTypeIcon(expense.expenseType.name),
 
             SizedBox(width: 20),
 
-            _ExpenseItemDetails(),
+            _ExpenseItemDetails(
+              description: expense.description,
+              amount: expense.amount,
+              spentAt: expense.spentAt,
+            ),
 
             SizedBox(width: 20),
 
@@ -59,7 +66,15 @@ class _ExpenseActions extends StatelessWidget {
 }
 
 class _ExpenseItemDetails extends StatelessWidget {
-  const _ExpenseItemDetails();
+  const _ExpenseItemDetails({
+    required this.description,
+    required this.amount,
+    required this.spentAt,
+  });
+
+  final String description;
+  final double amount;
+  final DateTime spentAt;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +84,7 @@ class _ExpenseItemDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Information about the expense',
+            capitalizeFirstLetter(description),
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
@@ -81,7 +96,7 @@ class _ExpenseItemDetails extends StatelessWidget {
                 style: TextStyle(fontSize: 14, color: AppTheme.primaryColor),
               ),
               Text(
-                'S/. 250.00',
+                formatToTwoDecimals(amount),
                 style: TextStyle(fontSize: 14, color: Colors.black),
               ),
             ],
@@ -93,7 +108,7 @@ class _ExpenseItemDetails extends StatelessWidget {
                 style: TextStyle(fontSize: 14, color: AppTheme.primaryColor),
               ),
               Text(
-                '01-10-2025',
+                formattedDate(spentAt),
                 style: TextStyle(fontSize: 14, color: Colors.black),
               ),
             ],

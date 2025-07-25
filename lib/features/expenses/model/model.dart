@@ -1,1 +1,3 @@
-export 'request/post_expense_request.dart';
+export 'expense.dart';
+export 'request/request.dart';
+export 'response/response.dart';

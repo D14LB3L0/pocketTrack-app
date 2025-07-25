@@ -1,5 +1,7 @@
 // Numbers
 
+import 'package:intl/intl.dart';
+
 String formatToTwoDecimals(num value) {
   return value.toStringAsFixed(2);
 }
@@ -9,4 +11,9 @@ String formatToTwoDecimals(num value) {
 String capitalizeFirstLetter(String text) {
   if (text.isEmpty) return text;
   return text[0].toUpperCase() + text.substring(1).toLowerCase();
+}
+
+// Date
+String formattedDate(DateTime date) {
+  return DateFormat('yyyy-MM-dd').format(date);
 }
