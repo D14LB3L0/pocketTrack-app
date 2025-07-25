@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pocket_track/routes/app_routes.dart';
 import 'package:pocket_track/shared/provider/provider.dart';
 import 'package:pocket_track/shared/utils/format_utils.dart';
+import 'package:pocket_track/shared/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 // own
@@ -71,24 +73,61 @@ class _SubmitButton extends StatelessWidget {
       child: SizedBox(
         width: width * 0.7,
         child: MaterialButton(
-          onPressed: () {
-            final isValid = expenseForm.isValidForm();
-            if (!isValid) return;
+          onPressed: expenseForm.isLoading
+              ? null
+              : () async {
+                  final isValid = expenseForm.isValidForm();
+                  if (!isValid) return;
 
-            print(expenseForm.amount);
-            print(expenseForm.description);
-            print(expenseForm.expenseType!.name);
-            print(expenseForm.date);
-          },
+                  try {
+                    await expenseForm.fetchPostExpense();
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(AppMessages.dataSaved)),
+                    );
+
+                    expenseForm.resetForm();
+
+                    Navigator.pushReplacementNamed(context, AppRoutes.expense);
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(AppMessages.genericError)),
+                    );
+                  }
+                },
           color: AppTheme.secondaryColor,
-          child: Text(
-            'Register Expense',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-            ),
-          ),
+          disabledColor: AppTheme.disabled,
+          child: expenseForm.isLoading
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      'Register Expense',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                )
+              : Text(
+                  'Register Expense',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
         ),
       ),
     );
@@ -141,7 +180,6 @@ class _DropDownTypeState extends State<_DropDownType> {
   Widget build(BuildContext context) {
     return Consumer<ExpenseTypesProvider>(
       builder: (_, provider, __) {
-
         if (provider.isLoading) {
           return const CircularProgressIndicator();
         }
