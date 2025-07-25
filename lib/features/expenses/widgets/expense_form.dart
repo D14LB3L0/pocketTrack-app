@@ -201,9 +201,12 @@ class _DropDownTypeState extends State<_DropDownType> {
               },
               items: provider.isLoading
                   ? [
-                      const DropdownMenuItem<ExpenseType>(
+                      DropdownMenuItem<ExpenseType>(
                         value: null,
-                        child: Text('Cargando...'),
+                        child: Text(
+                          'Cargando...',
+                          style: TextStyle(color: Colors.grey),
+                        ),
                       ),
                     ]
                   : provider.expenseTypes.map((type) {
@@ -253,6 +256,7 @@ class _AmountInputState extends State<_AmountInput> {
 
   @override
   Widget build(BuildContext context) {
+    bool hasAutoCompleted = false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -281,6 +285,16 @@ class _AmountInputState extends State<_AmountInput> {
             return null;
           },
           onChanged: (value) {
+            if (!hasAutoCompleted && value == '0') {
+              final newValue = '0.';
+              _controller.text = newValue;
+              _controller.selection = TextSelection.fromPosition(
+                TextPosition(offset: newValue.length),
+              );
+              widget.onChanged(0.0);
+              hasAutoCompleted = true;
+            }
+
             if (value == '.') {
               final newValue = '0.';
               _controller.text = newValue;
@@ -289,6 +303,10 @@ class _AmountInputState extends State<_AmountInput> {
               );
               widget.onChanged(0.0);
               return;
+            }
+
+            if (value.isEmpty) {
+              hasAutoCompleted = false;
             }
 
             widget.onChanged(double.tryParse(value) ?? 0.0);
