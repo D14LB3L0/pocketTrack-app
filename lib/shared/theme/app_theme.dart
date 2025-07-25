@@ -5,6 +5,7 @@ class AppTheme {
   static Color secondaryColor = Color(0XFF1aa3b3);
   static Color accentColor = Color(0XFF20dad8);
   static Color backgroundColor = Color(0XFFF0FCFC);
+  static Color disabled = Colors.grey;
 
   static ThemeData lighTheme = ThemeData.light().copyWith(
     colorScheme: ColorScheme.light(

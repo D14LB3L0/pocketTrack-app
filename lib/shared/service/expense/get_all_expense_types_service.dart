@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:pocket_track/api/pocket_track_api.dart';
 
-import '../model/expense_type/expense_type.dart';
-import '../model/model.dart';
+import '../../model/expense_type/expense_type.dart';
+import '../../model/model.dart';
 
-class ExpenseTypesService {
+class GetAllExpenseTypesService {
   final Dio _dio = DioClient.client;
 
   Future<List<ExpenseType>> getAllExpenseTypes() async {

@@ -3,7 +3,7 @@ import 'package:pocket_track/shared/model/expense_type/expense_type.dart';
 import 'package:pocket_track/shared/service/service.dart';
 
 class ExpenseTypesProvider extends ChangeNotifier {
-  final ExpenseTypesService _service = ExpenseTypesService();
+  final GetAllExpenseTypesService _service = GetAllExpenseTypesService();
 
   List<ExpenseType> _expenseTypes = [];
   bool _isLoading = false;

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pocket_track/routes/app_routes.dart';
 import 'package:pocket_track/shared/provider/provider.dart';
+import 'package:pocket_track/shared/theme/input_texts.dart';
 import 'package:pocket_track/shared/utils/format_utils.dart';
+import 'package:pocket_track/shared/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 // own
@@ -71,24 +74,61 @@ class _SubmitButton extends StatelessWidget {
       child: SizedBox(
         width: width * 0.7,
         child: MaterialButton(
-          onPressed: () {
-            final isValid = expenseForm.isValidForm();
-            if (!isValid) return;
+          onPressed: expenseForm.isLoading
+              ? null
+              : () async {
+                  final isValid = expenseForm.isValidForm();
+                  if (!isValid) return;
 
-            print(expenseForm.amount);
-            print(expenseForm.description);
-            print(expenseForm.expenseType!.name);
-            print(expenseForm.date);
-          },
+                  try {
+                    await expenseForm.fetchPostExpense();
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(AppMessages.dataSaved)),
+                    );
+
+                    expenseForm.resetForm();
+
+                    Navigator.pushReplacementNamed(context, AppRoutes.expense);
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(AppMessages.genericError)),
+                    );
+                  }
+                },
           color: AppTheme.secondaryColor,
-          child: Text(
-            'Register Expense',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-            ),
-          ),
+          disabledColor: AppTheme.disabled,
+          child: expenseForm.isLoading
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      'Register Expense',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                )
+              : Text(
+                  'Register Expense',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
         ),
       ),
     );
@@ -105,7 +145,7 @@ class _DatePickerInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Date', style: TextStyle(fontSize: 18)),
+        InputTexts.requiredInput(inputName: 'Date'),
         SizedBox(height: 10),
         DatePickerInput(expenseForm: expenseForm),
         SizedBox(height: 40),
@@ -141,18 +181,14 @@ class _DropDownTypeState extends State<_DropDownType> {
   Widget build(BuildContext context) {
     return Consumer<ExpenseTypesProvider>(
       builder: (_, provider, __) {
-
-        if (provider.isLoading) {
-          return const CircularProgressIndicator();
-        }
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Expense Type', style: TextStyle(fontSize: 18)),
+            InputTexts.requiredInput(inputName: "Expense Types"),
             const SizedBox(height: 8),
 
             DropdownButtonFormField<ExpenseType>(
+              dropdownColor: Colors.white,
               value: widget.expenseForm.expenseType,
               onChanged: (ExpenseType? selected) {
                 if (selected != null) {
@@ -163,12 +199,19 @@ class _DropDownTypeState extends State<_DropDownType> {
                 if (value == null) return 'Please select an expense type';
                 return null;
               },
-              items: provider.expenseTypes.map((type) {
-                return DropdownMenuItem(
-                  value: type,
-                  child: Text(capitalizeFirstLetter(type.name)),
-                );
-              }).toList(),
+              items: provider.isLoading
+                  ? [
+                      const DropdownMenuItem<ExpenseType>(
+                        value: null,
+                        child: Text('Cargando...'),
+                      ),
+                    ]
+                  : provider.expenseTypes.map((type) {
+                      return DropdownMenuItem(
+                        value: type,
+                        child: Text(capitalizeFirstLetter(type.name)),
+                      );
+                    }).toList(),
               decoration: const InputDecoration(
                 hintText: 'Select a type',
                 border: OutlineInputBorder(),
@@ -213,7 +256,7 @@ class _AmountInputState extends State<_AmountInput> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Amount', style: TextStyle(fontSize: 18)),
+        InputTexts.requiredInput(inputName: 'Amount'),
 
         TextFormField(
           controller: _controller,
@@ -268,7 +311,7 @@ class _DescriptionInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Description', style: TextStyle(fontSize: 18)),
+        InputTexts.requiredInput(inputName: 'Description'),
 
         TextFormField(
           maxLength: 50,
