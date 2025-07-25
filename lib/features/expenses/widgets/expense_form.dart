@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pocket_track/routes/app_routes.dart';
 import 'package:pocket_track/shared/provider/provider.dart';
+import 'package:pocket_track/shared/theme/input_texts.dart';
 import 'package:pocket_track/shared/utils/format_utils.dart';
 import 'package:pocket_track/shared/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -144,7 +145,7 @@ class _DatePickerInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Date', style: TextStyle(fontSize: 18)),
+        InputTexts.requiredInput(inputName: 'Date'),
         SizedBox(height: 10),
         DatePickerInput(expenseForm: expenseForm),
         SizedBox(height: 40),
@@ -180,17 +181,14 @@ class _DropDownTypeState extends State<_DropDownType> {
   Widget build(BuildContext context) {
     return Consumer<ExpenseTypesProvider>(
       builder: (_, provider, __) {
-        if (provider.isLoading) {
-          return const CircularProgressIndicator();
-        }
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Expense Type', style: TextStyle(fontSize: 18)),
+            InputTexts.requiredInput(inputName: "Expense Types"),
             const SizedBox(height: 8),
 
             DropdownButtonFormField<ExpenseType>(
+              dropdownColor: Colors.white,
               value: widget.expenseForm.expenseType,
               onChanged: (ExpenseType? selected) {
                 if (selected != null) {
@@ -201,12 +199,19 @@ class _DropDownTypeState extends State<_DropDownType> {
                 if (value == null) return 'Please select an expense type';
                 return null;
               },
-              items: provider.expenseTypes.map((type) {
-                return DropdownMenuItem(
-                  value: type,
-                  child: Text(capitalizeFirstLetter(type.name)),
-                );
-              }).toList(),
+              items: provider.isLoading
+                  ? [
+                      const DropdownMenuItem<ExpenseType>(
+                        value: null,
+                        child: Text('Cargando...'),
+                      ),
+                    ]
+                  : provider.expenseTypes.map((type) {
+                      return DropdownMenuItem(
+                        value: type,
+                        child: Text(capitalizeFirstLetter(type.name)),
+                      );
+                    }).toList(),
               decoration: const InputDecoration(
                 hintText: 'Select a type',
                 border: OutlineInputBorder(),
@@ -251,7 +256,7 @@ class _AmountInputState extends State<_AmountInput> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Amount', style: TextStyle(fontSize: 18)),
+        InputTexts.requiredInput(inputName: 'Amount'),
 
         TextFormField(
           controller: _controller,
@@ -306,7 +311,7 @@ class _DescriptionInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Description', style: TextStyle(fontSize: 18)),
+        InputTexts.requiredInput(inputName: 'Description'),
 
         TextFormField(
           maxLength: 50,
