@@ -8,20 +8,21 @@ class DatePickerInput extends StatefulWidget {
   ExpenseFormProvider expenseForm;
 
   DatePickerInput({super.key, required this.expenseForm});
-  
+
   @override
   _DatePickerInputState createState() => _DatePickerInputState();
 }
 
 class _DatePickerInputState extends State<DatePickerInput> {
   final TextEditingController _controller = TextEditingController();
-  DateTime? _selectedDate;
+  DateTime? _selectedDate;  
 
   @override
   void initState() {
     super.initState();
-    _selectedDate = DateTime.now();
-    _controller.text = DateFormat('dd/MM/yyyy').format(_selectedDate!);
+
+    _selectedDate = widget.expenseForm.date ?? DateTime.now();
+    _controller.text = DateFormat('dd-MM-yyyy').format(_selectedDate!);
     widget.expenseForm.date = _selectedDate!;
   }
 

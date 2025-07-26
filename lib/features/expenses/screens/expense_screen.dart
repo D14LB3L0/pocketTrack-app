@@ -65,7 +65,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
         padding: const EdgeInsets.only(bottom: 25.0),
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.addExpense);
+            Navigator.pushNamed(context, AppRoutes.formExpense);
           },
           child: Icon(Icons.add),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_track/features/expenses/model/model.dart';
+import 'package:pocket_track/routes/app_routes.dart';
 import 'package:pocket_track/shared/theme/theme.dart';
 import 'package:pocket_track/shared/utils/format_utils.dart';
 
@@ -32,7 +33,7 @@ class ExpenseItemCard extends StatelessWidget {
 
             SizedBox(width: 20),
 
-            _ExpenseActions(),
+            _ExpenseActions(expense: expense,),
           ],
         ),
       ),
@@ -41,8 +42,9 @@ class ExpenseItemCard extends StatelessWidget {
 }
 
 class _ExpenseActions extends StatelessWidget {
-  const _ExpenseActions();
+  const _ExpenseActions({required this.expense});
 
+  final Expense expense;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -51,6 +53,7 @@ class _ExpenseActions extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.edit, color: AppTheme.secondaryColor),
           onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.formExpense, arguments: expense);
             // Handle edit action
           },
         ),

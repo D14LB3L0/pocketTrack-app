@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 // own
 import '../../../shared/model/expense_type/expense_type.dart';
+import '../model/expense.dart';
 import '../providers/providers.dart';
 import '../../../shared/theme/theme.dart';
 import '../../../shared/widgets/widgets.dart';
@@ -18,6 +19,14 @@ class ExpenseForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final expenseForm = Provider.of<ExpenseFormProvider>(context);
+
+    // edit
+    final Expense? editingExpense =
+        ModalRoute.of(context)?.settings.arguments as Expense?;
+
+    if (editingExpense != null && !expenseForm.isInitialized) {
+      expenseForm.loadFromExpense(editingExpense);
+    }
 
     return Form(
       key: expenseForm.formKey,
@@ -47,7 +56,10 @@ class _ExpenseFormFields extends StatelessWidget {
       children: [
         _DescriptionInput(expenseForm: expenseForm),
 
-        _AmountInput(onChanged: (value) => expenseForm.amount = value),
+        _AmountInput(
+          onChanged: (value) => expenseForm.amount = value,
+          expenseForm: expenseForm,
+        ),
 
         _DropDownType(expenseForm: expenseForm, width: width),
 
@@ -79,7 +91,11 @@ class _SubmitButton extends StatelessWidget {
                   if (!isValid) return;
 
                   try {
-                    await expenseForm.fetchPostExpense();
+                    if (expenseForm.isInitialized) {
+                      await expenseForm.fetchUpdateExpense();
+                    } else {
+                      await expenseForm.fetchPostExpense();
+                    }
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(AppMessages.dataSaved)),
@@ -110,7 +126,9 @@ class _SubmitButton extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      'Register Expense',
+                      expenseForm.isInitialized
+                          ? 'Update Expense'
+                          : 'Register Expense',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -120,7 +138,9 @@ class _SubmitButton extends StatelessWidget {
                   ],
                 )
               : Text(
-                  'Register Expense',
+                  expenseForm.isInitialized
+                      ? 'Update Expense'
+                      : 'Register Expense',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -179,11 +199,32 @@ class _DropDownTypeState extends State<_DropDownType> {
   Widget build(BuildContext context) {
     return Consumer<ExpenseTypesProvider>(
       builder: (_, provider, __) {
+        if (provider.isLoading) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InputTexts.requiredInput(inputName: "Expense Types"),
+              const SizedBox(height: 6),
+
+              DropdownButtonFormField<ExpenseType>(
+                items: const [],
+                onChanged: null,
+                decoration: const InputDecoration(
+                  hintText: 'Select a type',
+                  border: OutlineInputBorder(),
+                ),
+                hint: Text('Select Type', style: TextStyle(color: Colors.grey)),
+              ),
+              const SizedBox(height: 25),
+            ],
+          );
+        }
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InputTexts.requiredInput(inputName: "Expense Types"),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
 
             DropdownButtonFormField<ExpenseType>(
               dropdownColor: Colors.white,
@@ -197,30 +238,20 @@ class _DropDownTypeState extends State<_DropDownType> {
                 if (value == null) return 'Please select an expense type';
                 return null;
               },
-              items: provider.isLoading
-                  ? [
-                      DropdownMenuItem<ExpenseType>(
-                        value: null,
-                        child: Text(
-                          'Cargando...',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    ]
-                  : provider.expenseTypes.map((type) {
-                      return DropdownMenuItem(
-                        value: type,
-                        child: Text(capitalizeFirstLetter(type.name)),
-                      );
-                    }).toList(),
+              items: provider.expenseTypes.map((type) {
+                return DropdownMenuItem(
+                  value: type,
+                  child: Text(
+                    capitalizeFirstLetter(type.name),
+                    style: TextStyle(fontWeight: FontWeight.normal),
+                  ),
+                );
+              }).toList(),
               decoration: const InputDecoration(
                 hintText: 'Select a type',
                 border: OutlineInputBorder(),
               ),
-              hint: Text(
-                'Select Type',
-                style: TextStyle(color: Colors.grey), 
-              ),  
+              hint: Text('Select Type', style: TextStyle(color: Colors.grey)),
               icon: Icon(Icons.arrow_drop_down, color: AppTheme.primaryColor),
             ),
 
@@ -233,9 +264,10 @@ class _DropDownTypeState extends State<_DropDownType> {
 }
 
 class _AmountInput extends StatefulWidget {
-  const _AmountInput({required this.onChanged});
+  const _AmountInput({required this.onChanged, required this.expenseForm});
 
   final void Function(double value) onChanged;
+  final ExpenseFormProvider expenseForm;
 
   @override
   State<_AmountInput> createState() => _AmountInputState();
@@ -248,6 +280,9 @@ class _AmountInputState extends State<_AmountInput> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    if (widget.expenseForm.amount != null) {
+      _controller.text = widget.expenseForm.amount!.toString();
+    }
   }
 
   @override
@@ -263,7 +298,6 @@ class _AmountInputState extends State<_AmountInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         InputTexts.requiredInput(inputName: 'Amount'),
-
         TextFormField(
           controller: _controller,
           keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -336,6 +370,7 @@ class _DescriptionInput extends StatelessWidget {
         TextFormField(
           maxLength: 50,
           autocorrect: false,
+          initialValue: expenseForm.description,
           style: TextStyle(fontSize: 16),
           decoration: InputDecorations.formInputDecoration(
             hintText: 'Add a short description',

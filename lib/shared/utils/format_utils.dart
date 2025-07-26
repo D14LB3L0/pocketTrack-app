@@ -15,5 +15,5 @@ String capitalizeFirstLetter(String text) {
 
 // Date
 String formattedDate(DateTime date) {
-  return DateFormat('yyyy-MM-dd').format(date);
+  return DateFormat('dd-MM-yyyy').format(date);
 }
