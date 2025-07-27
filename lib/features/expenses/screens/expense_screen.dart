@@ -19,10 +19,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ExpenseProvider>(
+      final expenseProvider = Provider.of<ExpenseProvider>(
         context,
         listen: false,
-      ).fetchGetAllExpenses();
+      );
+
+      expenseProvider.fetchGetAllExpenses();
+      expenseProvider.fetchTotalExpense();
     });
   }
 
@@ -31,14 +34,17 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     final expenseProvider = Provider.of<ExpenseProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Pocket Track')),
+      appBar: AppBar(
+        title: Text('Pocket Track'),
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: EdgeInsets.only(top: 40),
         child: Align(
           alignment: Alignment.topCenter,
           child: Column(
             children: [
-              ExpenseTotalCard(totalExpenses: 2590.151331),
+              ExpenseTotalCard(totalExpenses: expenseProvider.totalExpense),
 
               SizedBox(height: 40),
 
