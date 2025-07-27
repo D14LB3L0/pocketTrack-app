@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_track/features/expenses/model/model.dart';
-import 'package:pocket_track/features/expenses/model/request/update_expense_request.dart';
 
 import '../../../shared/model/expense_type/expense_type.dart';
 import '../service/service.dart';
