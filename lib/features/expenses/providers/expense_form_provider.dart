@@ -89,6 +89,7 @@ class ExpenseFormProvider extends ChangeNotifier {
       await _updateService.updateExpense(updateRequest);
     } catch (e) {
       print('Error: $e');
+      rethrow;
     } finally {
       _isLoading = false;
       notifyListeners();

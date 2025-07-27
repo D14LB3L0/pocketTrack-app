@@ -98,7 +98,10 @@ class _SubmitButton extends StatelessWidget {
                     }
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(AppMessages.dataSaved)),
+                      SnackBar(
+                        content: Text(AppMessages.dataSaved),
+                        backgroundColor: AppTheme.primaryColor,
+                      ),
                     );
 
                     expenseForm.resetForm();
@@ -106,7 +109,10 @@ class _SubmitButton extends StatelessWidget {
                     Navigator.pushReplacementNamed(context, AppRoutes.expense);
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(AppMessages.genericError)),
+                      SnackBar(
+                        content: Text(AppMessages.genericError),
+                        backgroundColor: Colors.amber,
+                      ),
                     );
                   }
                 },

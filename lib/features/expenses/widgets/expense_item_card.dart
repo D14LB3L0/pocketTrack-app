@@ -79,13 +79,42 @@ class _ExpenseActions extends StatelessWidget {
             : IconButton(
                 icon: Icon(Icons.delete, color: Colors.red),
                 onPressed: () async {
-                  final expenseProvider = Provider.of<ExpenseProvider>(
-                    context,
-                    listen: false,
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('¿Estás seguro?'),
+                      content: Text(
+                        '¿Deseas eliminar este gasto? Esta acción no se puede deshacer.',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: Text('Cancelar', style: TextStyle(color: Colors.red),),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          child: Text('Aceptar'),
+                        ),
+                      ],
+                    ),
                   );
-                  await expenseProvider.deleteExpense(expense.id);
 
-                  await expenseProvider.fetchGetAllExpenses();
+                  if (confirm == true) {
+                    final expenseProvider = Provider.of<ExpenseProvider>(
+                      context,
+                      listen: false,
+                    );
+                    await expenseProvider.deleteExpense(expense.id);
+                    await expenseProvider.fetchGetAllExpenses();
+
+                    // Notificación visual
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Gasto eliminado correctamente'),
+                        backgroundColor: AppTheme.primaryColor,
+                      ),
+                    );
+                  }
                 },
               ),
       ],
